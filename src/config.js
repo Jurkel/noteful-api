@@ -11,5 +11,6 @@ const setDatabaseUrl = (env) => {
 module.exports = {
   PORT: process.env.PORT || 8000,
   NODE_ENV: process.env.NODE_ENV || 'development',
-  DB_URL: setDatabaseUrl(process.env.NODE_ENV)
+  DATABASE_URL: setDatabaseUrl(process.env.NODE_ENV),
+  TEST_DATABASE_URL: process.env.TEST_DATABASE_URL || 'postgresql://dunder_mifflin@localhost/noteful-test'
 };
