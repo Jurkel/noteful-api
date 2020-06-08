@@ -13,4 +13,5 @@ module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   DATABASE_URL: setDatabaseUrl(process.env.NODE_ENV),
   TEST_DATABASE_URL: process.env.TEST_DATABASE_URL || 'postgresql://dunder_mifflin@localhost/noteful-test'
+  
 };
