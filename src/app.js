@@ -17,7 +17,7 @@ app.use(helmet());
 app.use(express.json());
 
 // whitelist allowed origins
-const allowedOrigins = ['http://localhost:3000', 'http://my-prod-client-app-url'];
+const allowedOrigins = ['http://localhost:3000', 'https://secure-bastion-12745.herokuapp.com'];
 app.use(cors({
   origin: function(origin, callback){
     // allow requests with no origin - like mobile apps, curl, postman
