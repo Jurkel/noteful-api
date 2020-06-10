@@ -3,48 +3,34 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
-const { NODE_ENV } = require('./config');
-const app = express();
+const { NODE_ENV } = require('../config');
 const foldersRouter = require('./folders/folders-router');
 const notesRouter = require('./notes/notes-router');
 
-const morganOption = (NODE_ENV === 'production')
-  ? 'tiny'
-  : 'common';
+const app = express();
+app.use(cors());
+const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
 app.use(helmet());
-app.use(express.json());
-
-// whitelist allowed origins
-const allowedOrigins = ['http://localhost:3000', 'https://secure-bastion-12745.herokuapp.com'];
-app.use(cors({
-  origin: function(origin, callback){
-    // allow requests with no origin - like mobile apps, curl, postman
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'The CORS policy for this site does not ' +
-                  'allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  }
-}));
 
 app.use('/api/folders', foldersRouter);
 app.use('/api/notes', notesRouter);
-app.use(errorHandler);
 
-function errorHandler(error, req, res, next) {
-  const code = error.status || 500;
+app.get('/xss', (req, res) => {
+  res.cookie('secretToken', '1234567890');
+  res.sendFile(__dirname + '/xss.example.html');
+});
 
+app.use(function errorHandler(error, req, res, next) {
+  let response;
   if (NODE_ENV === 'production') {
-    error.message = code === 500 ? 'internal server error' : error.message;
+    response = { error: { message: error.message, error } };
   } else {
     console.error(error);
+    response = { message: error.message, error };
   }
-
-  res.status(code).json({ message: error.message });
-}
+  res.status(500).json(response);
+});
 
 module.exports = app;
