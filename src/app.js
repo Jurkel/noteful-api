@@ -18,8 +18,8 @@ const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
 app.use(morgan(morganOption));
 app.use(helmet());
 
-app.use('/api/folders', foldersRouter);
-app.use('/api/notes', notesRouter);
+app.use('/folders', foldersRouter);
+app.use('/notes', notesRouter);
 
 app.get('/xss', (req, res) => {
   res.cookie('secretToken', '1234567890');
