@@ -10,9 +10,7 @@ const notesRouter = require('./notes/notes-router');
 const app = express();
 
 app.use(
-  cors({
-    origin: CLIENT_ORIGIN
-  })
+  cors()
 );
 
 const morganOption = NODE_ENV === 'production' ? 'tiny' : 'common';
